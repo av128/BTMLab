@@ -63,7 +63,7 @@ int main(int argc, const char* argv[])
         blockGroupNrealizations.reserve(instance.numberRealizations);
         for (int j = 0; j < instance.numberRealizations; j++)
         {
-            blockGroupNrealizations.emplace_back(new BlockGroup(instance.blockNumber));
+            blockGroupNrealizations.emplace_back(new BlockGroup(instance.blockNumber, "Y"));
         }
 
         // double time = 0.;

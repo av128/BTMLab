@@ -5,7 +5,7 @@
 class BlockGroup
 {
 public:
-    explicit BlockGroup(const Integer blockNumber);  // constructor
+    explicit BlockGroup(const Integer blockNumber, const std::string model);  // constructor
     ~BlockGroup();  // destructor '~' by convention, usually done automatically. We have to
                     // declare it.
     void initializeBlockGroup();

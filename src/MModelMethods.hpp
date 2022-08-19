@@ -15,16 +15,17 @@ public:
     virtual Real derivativeDoubleWellPieceWisePotential(Real x, Real y) override;
 
     virtual Real xDerivativeGSoftDevice(
-        Real x, Real y, Real z, Real x_, Real y_, Real z_, bool S, Real t) override
+        Real x, Real y, Real z, Real x_, Real y_, Real z_, bool S, Real t, Real phaseSpace, Real phaseTime) override
     {
+        // phaseSpace is ignored here
         return -instance.spacePeriodicPotentialFunction(x) - coupling(x, y, z);
     }
 
     virtual Real yDerivativeGSoftDevice(
-        Real x, Real y, Real z, Real x_, Real y_, Real z_, bool S, Real t) override
+        Real x, Real y, Real z, Real x_, Real y_, Real z_, bool S, Real t, Real phaseTime) override
     {
         return -derivativeDoubleWellPieceWisePotential(x, y) - coupling(x, y, z) +
-               instance.colorNoiseFunction(t);
+               instance.colorNoiseFunction(t + phaseTime);
     }
 
     explicit MModelMethods();

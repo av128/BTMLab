@@ -16,18 +16,6 @@ public:
     virtual Real derivativeDoubleWellPieceWisePotential(Real x, Real y) = 0;
 
     virtual Real xDerivativeGSoftDevice(
-        Real x, Real y, Real z, Real x_, Real y_, Real z_, bool S, Real t)
-    {
-        std::runtime_error("Function Not Implemented");
-    }
-
-    virtual Real yDerivativeGSoftDevice(
-        Real x, Real y, Real z, Real x_, Real y_, Real z_, bool S, Real t)
-    {
-        std::runtime_error("Function Not Implemented");
-    }
-
-    virtual Real xDerivativeGSoftDevice(
         Real x, Real y, Real z, Real x_, Real y_, Real z_, bool S, Real t, Real phaseSpace, Real phaseTime)
     {
         std::runtime_error("Function Not Implemented");
