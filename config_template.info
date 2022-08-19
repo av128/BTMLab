@@ -1,0 +1,148 @@
+#==============================GENERAL RULES============================================================================
+# The general config template, is a simple file inspired by standard "yaml" format. We advise the use of "utf8" encoding.
+# By convention, the config file can contain any number of comments lines, but each comment should start with symbol "#".
+# Few important rules :
+# 1) the variable names should start with low case character, no special symbols such "_$%*&!+-\|<>," etc. admitted
+# 2) the node variables should have the same labels as the corresponded variables in the main C++ code.
+# 3) each node variable preceded by "- " Ex. - myVariable
+# 4) each node variable separated from it's value by ": " Ex. - myVariable: 123.45
+# 5) all node variables organized using standard tabulation.
+# 6) don't use single/double quotes for strings values.
+# 7) the admitted boolean values are only true or false.
+# 8) no empty line between different nodes "model_characteristics", state, ...'
+# 9) the node labels are low case with "_" symbol instead of space " " or "-", Ex: piece_wise_double_well_function
+# 10) always include the config file description.
+#
+#===============================CONFIG FILE DESCRIPTION=================================================================
+#=======================================================================================================================
+# Node "model_characteristics" contains the general description of experiment:
+# - deviceDescription: could be any string.
+# - deviceConfiguration: interaction experiment architecture can take only two values "parallel" or "in-serie".
+# - modelMemory: is boolean false or true, right now we encoded the model without internal memory.
+# - modelType: is a string which take only two possible value "xy" or "y_ps".
+# other characteristics can be added latter.
+#=======================================================================================================================
+# Node "state" now contains only one variable:
+# - blockNumber: is a integer which defines the number of motors (block) in the system.
+#=======================================================================================================================
+# Node "potentials_description" contains the keys strings which indicate the mathematical functions used to model the
+# space periodic potential and double-well potential.
+# - spacePeriodicPotential: the space periodic part of model potential, we implemented "SawToothPotential" and "SinusPotential".
+# - doubleWellPotential: the double well part of model potential, we implemented "PieceWisePotential" and "QuarticPotential".
+# By default, we advise the use of "SawToothPotential" and "PieceWisePotential".
+#=======================================================================================================================
+# Node "interaction" defines the interaction between the variables {X,Y,Z} of one block.
+# - alpha: numeric float, dimensionless parameter, by default, equals to 1
+# - beta: numeric float, dimensionless parameter, by default, equals to 1
+# - zeta: numeric float, dimensionless parameter, by default, equals to 1
+# - interactionStiffness: numeric float, the stiffness of linear spring which associated to Z, by default, equals to 1
+# if "deviceConfiguration" is "in-serie" we will have additional variable:
+# - km: numeric float, the stiffness of linear spring which links the blocks in-serie configuration, by default, equals to 1.
+#=======================================================================================================================
+# Node "piece_wise_double_well_function" provides the mandatory characteristic of function:
+# - leftWellStiffness: numeric float, the stiffness of the left minima of double-well potential
+# - rightWellStiffness: numeric float, the stiffness of right minima of double-well potential
+# - leftWellPosition: numeric float, the position of left minima of double-well potential, by default, equals to 0
+# - saddlePointPosition: numeric float, controls the position of the saddle point of double-well potential
+# - rightWellPosition: numeric float, controls the position of right minima of double-well potential, by default, equals to 1
+#=======================================================================================================================
+# Node "piece_wise_space_periodic_function" provides the mandatory characteristic of function:
+# - phiMax: numeric float, the maximum value of space periodic potential
+# - spacePeriod": numeric float, of space periodic potential, be default, equals to 1.
+# - toothPosition: numeric float, controls the asymmetry of space periodic potential, for symmetric potential use 0.
+#=======================================================================================================================
+# Node "sinus_potential" provides the mandatory characteristic of function:
+# - phiMax: numeric float, the maximum value of space periodic potential
+# - spacePeriod": numeric float, of space periodic potential, be default, equals to 1.
+# Node "quartic_function" provides the mandatory characteristic of function $w(y) = -0.25 h^{4} y^{2} + 0.5 c^{2} y^{4}$:
+# - h: numeric float,
+# - c: numeric float
+# latter, if necessary we can introduce the general quartic potential (polynomial of degree 4)
+#=======================================================================================================================
+# Node "external_load"
+# - cargoMin: numeric float, conservative force imposed on the system in Soft Device; is the left boundary value of the interval
+# - cargoMax: numeric float, conservative force imposed on the system in Soft Device; is the rigth boundary value of the interval
+# - numberPoints: numeric integer, number of points in interval [cargoMin, cargoMax].
+#=======================================================================================================================
+# Node "white_noise_properties" provides the diagonal values of the diffusion matrix associated with white noise:
+# - xD: numeric float, the X diffusion coefficient,
+# - yD: numeric float, the Y diffusion coefficient,
+# - zD: numeric float, the Z diffusion coefficient, not used here
+#=======================================================================================================================
+# Node "color_noise_properties", provides the mandatory characteristics of color noise.
+# - colorNoiseFunctionName: string, we implemented so far "CosinusWave" and "SquareWave"
+# - characteristicTimeColorNoise: numeric float, characteristic time period of color noise
+# - amplitudeColorNoise": numeric float, the amplitude value of color noise
+#=======================================================================================================================
+# Node "numerics", we provides all mandatory parameters for numeric schema:
+# - dt: numeric float, time step using in the Euler SDE solver ($\Delta t$)
+# - dtSave: numeric integer , used delay to save the trajectory path
+# - numberRealizations: numeric integer, the number of realization $N$ used in Euler scheme
+# - numberPeriodsTotalDuration: numeric integer, the number of color noise time periods which estimates the total duration of experiment
+# - numberPeriodsToRelax: numeric integer, the number of color noise time periods which estimates the relaxation time
+# expressed as multiple of characteristic color moise time period,
+# - singleTrajectoryNumberSave: numeric integer, the single realization to save
+# - initialState: the distribution used to initiate the model dynamics. So far we implemented only "UniformDistribution".
+#=======================================================================================================================
+# Node "output":
+# - averageTrajectoriesFile: string, the data storage file name of average trajectories
+# - singleStochasticPath: string, the data storage file name of one particular single realization
+# - phaseBlockState: string, the data storage file name of used phase state for each block
+# - logsfile: string, the logs storage file name
+#=======================================================================================================================
+model_characteristics:
+  - deviceDescription: force-velocity
+  - deviceConfiguration: Parallel
+  - modelMemory: false
+  - modelType: y_ps
+state:
+  - blockNumber: 2
+potentials_description:
+  - spacePeriodicPotential: SawToothPotential
+  - doubleWellPotential: PieceWisePotential
+interaction:
+  - alpha: 1
+  - beta: 1
+  - zeta: 1
+  - interactionStiffness: 1
+sinus_potential:
+  - phiMax: 1
+  - spacePeriod: 1
+piece_wise_space_periodic_function:
+  - phiMax: 1
+  - spacePeriod: 1
+  - toothPosition: 0.7
+piece_wise_double_well_function:
+  - leftWellPosition: 0.0
+  - saddlePointPosition: 0.33
+  - rightWellPosition: 1.0
+  - leftWellStiffness: 1.5
+  - rightWellStiffness: 0.43
+quartic_function:
+  - h: 1.5
+  - c: 1.5
+external_load:
+  - cargoMin: -0.01
+  - cargoMax: 0.01
+  - numberPoints: 3
+white_noise_properties:
+  - xD: 0.1
+  - yD: 0.1
+  - zD: 0.1
+color_noise_properties:
+  - colorNoiseFunctionName: SquareWave
+  - characteristicTimeColorNoise: 10.0
+  - amplitudeColorNoise: 2.5
+numerics:
+  - dt: 0.01
+  - dtSave: 5
+  - numberRealizations: 1000
+  - numberPeriodsTotalDuration: 50
+  - numberPeriodsToRelax: 10
+  - singleTrajectoryNumberSave: 4
+  - initialState: UniformDistribution
+output:
+  - averageTrajectoriesFile: OUT0
+  - singleStochasticPath: OUT1
+  - phaseBlockState: OUT3
+  - logsfile: LOGS

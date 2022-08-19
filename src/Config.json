@@ -1,0 +1,58 @@
+model_characteristics:
+  - deviceDescription: force-velocity
+  - deviceConfiguration: Parallel
+  - modelMemory: false
+  - modelType: y_ps
+state:
+  - blockNumber: 2
+  - phaseSpaceUse: false
+  - phaseTimeDistribution: RegularDistribution
+potentials_description:
+  - spacePeriodicPotential: SawToothPotential
+  - doubleWellPotential: PieceWisePotential
+interaction:
+  - alpha: 1
+  - beta: 1
+  - zeta: 1
+  - interactionStiffness: 1
+sinus_potential:
+  - phiMax: 1
+  - spacePeriod: 1
+piece_wise_space_periodic_function:
+  - phiMax: 1
+  - spacePeriod: 1
+  - toothPosition: 0.4
+piece_wise_double_well_function:
+  - leftWellPosition: 0.0
+  - saddlePointPosition: 0.33
+  - rightWellPosition: 1.0
+  - leftWellStiffness: 1.5
+  - rightWellStiffness: 0.43
+quartic_function:
+  - h: 1.5
+  - c: 1.5
+external_load:
+  - cargoMin: -2.0
+  - cargoMax: 0.1
+  - numberPoints: 20
+white_noise_properties:
+  - xD: 0.03
+  - yD: 0.03
+  - zD: 0.03
+color_noise_properties:
+  - colorNoiseFunctionName: SquareWave
+  - characteristicTimeColorNoise: 20.0
+  - amplitudeColorNoise: 3.5
+numerics:
+  - dt: 0.001
+  - dtSave: 5
+  - numberRealizations: 100
+  - numberPeriodsTotalDuration: 20
+  - numberPeriodsToRelax: 10
+  - singleTrajectoryNumberSave: 4
+  - initialState: UniformDistribution
+output:
+  - averageTrajectoriesFile: OUT0
+  - singleStochasticPath: OUT1
+  - phaseBlockState: OUT3
+  - logsfile: LOGS
