@@ -149,7 +149,12 @@ Config::Config()
         logsfile = module.getParam("logsfile").val;
     }
 
-    initStatePhase();
+    if (model == "Y")
+        initStatePhaseY();
+    else if (model == "XY")
+        initStatePhaseXY();
+    else
+        std::runtime_error("Unkown model <" + model + ">");
 }
 
 // void Config::initState(std::vector<Block> & blockForward, std::vector<Block> & blockBackward)
@@ -172,13 +177,13 @@ Config::Config()
 //    }
 //}
 
-void Config::initStatePhase()
+void Config::initStatePhaseY()
 {
     phaseTime.resize(blockNumber);
     phaseSpace.resize(blockNumber);
     if (phaseTimeDistribution == "RegularDistribution")
     {
-        phaseTime = linspace(0, 0.5*characteristicTimeColorNoise, blockNumber);
+        phaseTime = linspace(0, 0.5 * characteristicTimeColorNoise, blockNumber);
         phaseSpace = linspace(0, spacePeriod, blockNumber);
     }
     else
@@ -191,6 +196,46 @@ void Config::initStatePhase()
             std::uniform_real_distribution<> uDis_0_L(0., spacePeriod);
             phaseTime[i] = uDis_0_tau(gen);
             phaseSpace[i] = uDis_0_L(gen);
+        }
+    }
+}
+
+void Config::initStatePhaseXY()
+{
+    phaseTime.resize(blockNumber);
+    phaseSpace.resize(blockNumber);
+    if (phaseTimeDistribution == "RegularDistribution")
+    {
+        phaseTime = linspace(0, characteristicTimeColorNoise, blockNumber);
+        if (phaseSpaceUse == false)
+        {
+            for (int i = 0; i < blockNumber; i++)
+            {
+                phaseSpace[i] = 0;
+            }
+        }
+        else
+        {
+            phaseSpace = linspace(0, spacePeriod, blockNumber);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < blockNumber; i++)
+        {
+            std::random_device rd{};
+            std::mt19937 gen{rd()};
+            std::uniform_real_distribution<> uDis_0_tau(0., characteristicTimeColorNoise);
+            phaseTime[i] = uDis_0_tau(gen);
+            if (phaseSpaceUse == false)
+            {
+                phaseSpace[i] = 0;
+            }
+            else
+            {
+                std::uniform_real_distribution<> uDis_0_L(0., spacePeriod);
+                phaseSpace[i] = uDis_0_L(gen);
+            }
         }
     }
 }

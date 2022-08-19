@@ -22,6 +22,7 @@
 int main(int argc, const char* argv[])
 {
     Config& instance = Config::instance();
+    instance.model = "Y";
     const std::vector<double>& cargoVector =
         linspace(instance.cargoMin, instance.cargoMax, instance.numberPoints);
     auto startTimeSimulation = std::chrono::steady_clock::now();

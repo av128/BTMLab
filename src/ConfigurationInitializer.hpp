@@ -77,8 +77,10 @@ public:
     std::string phaseTimeDistribution;
     bool modelMemory;
     bool phaseSpaceUse;
+    std::string model;
 
 protected:
     Config();
-    void initStatePhase();
+    void initStatePhaseY();
+    void initStatePhaseXY();
 };
