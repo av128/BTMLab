@@ -77,7 +77,7 @@ public:
     std::string phaseTimeDistribution;
     bool modelMemory;
     bool phaseSpaceUse;
-    std::string model;
+    std::string model = "Y";
 
 protected:
     Config();
