@@ -20,9 +20,9 @@ BlockGroup::BlockGroup(const int blockNumber, const std::string model)
     m_blockForward.reserve(m_blockNumber);  // empty vector
     m_blockBackward.reserve(m_blockNumber); // empty vector
     // TODO add condition check if config is RL
-    if (model == "Y")
+    if (model == "y_ps")
         m_model = std::make_shared<MModelMethods>();
-    else if (model == "XY")
+    else if (model == "xy")
         m_model = std::make_shared<XYModelMethods>();
     else
         std::runtime_error("Unknown Model <" + model + ">");

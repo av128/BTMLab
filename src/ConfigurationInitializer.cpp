@@ -149,12 +149,12 @@ Config::Config()
         logsfile = module.getParam("logsfile").val;
     }
 
-    if (model == "Y")
+    if (modelType == "y_ps")
         initStatePhaseY();
-    else if (model == "XY")
+    else if (modelType == "xy")
         initStatePhaseXY();
     else
-        std::runtime_error("Unkown model <" + model + ">");
+        std::runtime_error("Unkown model <" + modelType + ">");
 }
 
 // void Config::initState(std::vector<Block> & blockForward, std::vector<Block> & blockBackward)

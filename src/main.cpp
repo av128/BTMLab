@@ -22,7 +22,6 @@
 int main(int argc, const char* argv[])
 {
     Config& instance = Config::instance();
-    instance.model = "Y";
     const std::vector<double>& cargoVector =
         linspace(instance.cargoMin, instance.cargoMax, instance.numberPoints);
     auto startTimeSimulation = std::chrono::steady_clock::now();
@@ -64,7 +63,7 @@ int main(int argc, const char* argv[])
         blockGroupNrealizations.reserve(instance.numberRealizations);
         for (int j = 0; j < instance.numberRealizations; j++)
         {
-            blockGroupNrealizations.emplace_back(new BlockGroup(instance.blockNumber, "Y"));
+            blockGroupNrealizations.emplace_back(new BlockGroup(instance.blockNumber, instance.modelType));
         }
 
         // double time = 0.;
