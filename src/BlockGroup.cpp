@@ -10,8 +10,7 @@
 #include "XYModelMethods.hpp"
 #include "MathMethods.hpp"
 #include "OutputBuffer.hpp"
-#include <iostream>
-#include <random>
+#include "FND.hpp"
 
 // constructor BlockGroup
 BlockGroup::BlockGroup(const int blockNumber, const std::string model)
@@ -62,11 +61,10 @@ void BlockGroup::forwardBlockGroupStep(const double cargoStep)
     // SDEsolver sdeSolver;//instance of class object
 
     Real couplingFunctionalSum = 0.;
-    static std::mt19937_64 m_rng;
     // values near the mean are the most likely
     // standard deviation affects the dispersion of generated values from the mean
-    static std::normal_distribution<> m_normaDistribution{0, 1};
-    Real zNoiseTerm = m_normaDistribution(m_rng);
+    static FND fnd(0, 1); // fast normal distribution
+    Real zNoiseTerm = fnd();
     for (int i = 0; i < m_blockNumber; i++)
     {
         couplingFunctionalSum += m_model->coupling(
@@ -111,8 +109,7 @@ Block BlockGroup::eulerStepParallel(const Block &currentBlock, const Block &curr
 {
     Config &instance = Config::instance();
 
-    static std::mt19937_64 m_rng;
-    static std::normal_distribution<> m_normDistribution{0, 1};
+    static FND fnd(0, 1); // fast normal distribution
 
     // values near the mean are the most likely
     // standard deviation affects the dispersion of generated values from the mean
@@ -124,14 +121,14 @@ Block BlockGroup::eulerStepParallel(const Block &currentBlock, const Block &curr
                                         currentBackwardBlock.pos.x, currentBackwardBlock.pos.y, currentBackwardBlock.pos.z,
                                         currentBlock.S, time * instance.dt, instance.phaseSpace[index], instance.phaseTime[index]) *
             instance.dt +
-        sqrt(2 * instance.xD * instance.alpha * instance.dt) * m_normDistribution(m_rng);
+        sqrt(2 * instance.xD * instance.alpha * instance.dt) * fnd();
     block.pos.y =
         currentBlock.pos.y +
         m_model->yDerivativeGSoftDevice(currentBlock.pos.x, currentBlock.pos.y, currentBlock.pos.z,
                                         currentBackwardBlock.pos.x, currentBackwardBlock.pos.y, currentBackwardBlock.pos.z,
                                         currentBackwardBlock.S, time * instance.dt, instance.phaseTime[index]) *
             instance.dt +
-        sqrt(2 * instance.yD * instance.beta * instance.dt) * m_normDistribution(m_rng);
+        sqrt(2 * instance.yD * instance.beta * instance.dt) * fnd();
     block.pos.z = currentBlock.pos.z + zzz * instance.zeta * instance.dt +
                   sqrt(2 * instance.zD * instance.zeta * instance.dt) * zNoiseTerm;
     return block;
