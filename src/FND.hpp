@@ -28,7 +28,7 @@ public:
     }
 
 private:
-    std::mt19937_64 m_rng;
+    std::minstd_rand m_rng;
     const Real m_mu;
     const Real m_sigma;
     Real m_n1;
