@@ -16,12 +16,15 @@ public:
     FND(const Real mu, const Real sigma) : m_mu(mu), m_sigma(sigma), m_index{0}
     {
         m_nVals.resize(FND_SIZE);
-        static int call = 0;
-        std::cerr << "FND Instance: " << call++ << "\n";
+        // static int call = 0;
+        // std::cerr << "FND Instance: " << call++ << "\n";
     }
 
     void generate()
     {
+        // static int call = 0;
+        // std::cerr << "FND Generate Instance: " << call++ << "\n";
+
 #pragma omp parallel for
         for (Integer i = 0; i < FND_HALF_SIZE; i++)
         {

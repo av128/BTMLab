@@ -18,8 +18,9 @@
 Real squarePeriodicSignal(Real t)
 {
     Config& instance = Config::instance();
-    if ((t - static_cast<int>(floor(t / instance.characteristicTimeColorNoise)) *
-                 instance.characteristicTimeColorNoise) <
+    static Real invCharacteristicTimeColorNoise = 1.0 / instance.characteristicTimeColorNoise;
+
+    if ((t - floor(t * invCharacteristicTimeColorNoise) * instance.characteristicTimeColorNoise) <
         (0.5 * instance.characteristicTimeColorNoise))
     {
         return instance.amplitudeColorNoise;
@@ -51,15 +52,17 @@ Real derivativeSinusPotential(Real x)
 Real derivativeSawToothPeriodicPotential(Real x)
 {
     Config& instance = Config::instance();
-    int control;
-    control = static_cast<int>(floor(x / instance.spacePeriod));
-    if ((x - control * instance.spacePeriod) <
-        (0.5 * instance.spacePeriod * (1 + instance.toothPosition)))
+    static Real invSpacePeriod = 1.0 / instance.spacePeriod;
+    static Real res =
+        2.0 * instance.phiMax / (instance.spacePeriod * (1.0 + instance.toothPosition));
+
+    if ((x - floor(x * invSpacePeriod) * instance.spacePeriod) <
+        (0.5 * instance.spacePeriod * (1.0 + instance.toothPosition)))
     {
-        return 2 * instance.phiMax / (instance.spacePeriod * (1 + instance.toothPosition));
+        return res;
     }
     else
     {
-        return -2 * instance.phiMax / (instance.spacePeriod * (1 - instance.toothPosition));
+        return -res;
     }
 }
