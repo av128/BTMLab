@@ -19,12 +19,14 @@ public:
         Real x, Real y, Real z, Real x_, Real y_, Real z_, bool S, Real t, Real phaseSpace, Real phaseTime)
     {
         std::runtime_error("Function Not Implemented");
+        return Real{};
     }
 
     virtual Real yDerivativeGSoftDevice(
         Real x, Real y, Real z, Real x_, Real y_, Real z_, bool S, Real t, Real phaseTime)
     {
         std::runtime_error("Function Not Implemented");
+        return Real{};
     }
 
     explicit IModelMethods() : instance(Config::instance()) {}

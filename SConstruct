@@ -26,7 +26,7 @@ def setDebugFlags(env):
 
 def setCppFlags(env):
     if isWindows():
-        env.AppendUnique(CPPFLAGS = ['/EHsc', '/std:c++17', '/MTd'])
+        env.AppendUnique(CPPFLAGS = ['/EHsc', '/std:c++17', '/MTd', '/openmp'])
     else:
         env.AppendUnique(CPPFLAGS = ['-std=c++17'])
         env.AppendUnique(CPPFLAGS = ['-w'])
@@ -34,6 +34,8 @@ def setCppFlags(env):
 def setOptimizeFlags(env):
     if isWindows():
         env.AppendUnique(CPPFLAGS = ['/Ox'])
+        env.AppendUnique(CPPFLAGS = ['/DEBUG'])
+        env.AppendUnique(LINKFLAGS = ['/DEBUG:FASTLINK'])
     else:
         env.AppendUnique(CPPFLAGS = ['-O3'])
 
