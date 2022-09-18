@@ -10,6 +10,7 @@ def isWindows():
 def setLibs(env):
     if not isWindows():
         env.AppendUnique(LIBS = ['stdc++fs'])
+        env.AppendUnique(LIBS = ['gomp'])
 
     # else need to be specified
 
@@ -30,6 +31,7 @@ def setCppFlags(env):
     else:
         env.AppendUnique(CPPFLAGS = ['-std=c++17'])
         env.AppendUnique(CPPFLAGS = ['-w'])
+        env.AppendUnique(CPPFLAGS = ['-fopenmp'])
 
 def setOptimizeFlags(env):
     if isWindows():
